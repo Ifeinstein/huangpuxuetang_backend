@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const uuid = require('node-uuid');
 
-const config = require('./db_config');
+const db_config = require('./config/db_config');
 
 // console.log('init sequelize...');
 
@@ -10,9 +10,9 @@ function generateId() {
     return uuid.v4();
 }
 
-var sequelize = new Sequelize(config.database, config.username, config.password, {
-    host: config.host,
-    dialect: config.dialect,
+var sequelize = new Sequelize(db_config.database, db_config.username, db_config.password, {
+    host: db_config.host,
+    dialect: db_config.dialect,
     pool: {
         max: 5,
         min: 0,

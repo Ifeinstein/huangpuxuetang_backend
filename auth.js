@@ -1,5 +1,6 @@
 const passport = require('koa-passport');
 const model = require('./model');
+const wx_config = require('./config/wx_config.js');
 
 let User = model.User;
 
@@ -18,49 +19,15 @@ passport.deserializeUser(async function(id, done) {
 
 const LocalStrategy = require('passport-local').Strategy
 passport.use(new LocalStrategy({
-    usernameField: 'phone',
+    usernameField: 'code',
     passwordField: 'password'
-}, async function(phone, password, done) {
-    let user = await User.findOne({ where: { phone: phone, password: require('crypto').createHash('sha1').update(password).digest('hex') } })
+}, async function(code, password, done) {
+    let user_info = wx_config.user_info(code);
+
+    let user = await User.findOne({ where: { openId: user_info.openId } })
     if (user) {
         done(null, user)
     } else {
         done(null, false)
     }
 }))
-
-// const FacebookStrategy = require('passport-facebook').Strategy
-// passport.use(new FacebookStrategy({
-//         clientID: 'your-client-id',
-//         clientSecret: 'your-secret',
-//         callbackURL: 'http://localhost:' + (process.env.PORT || 3000) + '/auth/facebook/callback'
-//     },
-//     function(token, tokenSecret, profile, done) {
-//         // retrieve user
-//         User.findOne({ facebook_id: profile.id }, done);
-//     }
-// ))
-
-// const TwitterStrategy = require('passport-twitter').Strategy
-// passport.use(new TwitterStrategy({
-//         consumerKey: 'your-consumer-key',
-//         consumerSecret: 'your-secret',
-//         callbackURL: 'http://localhost:' + (process.env.PORT || 3000) + '/auth/twitter/callback'
-//     },
-//     function(token, tokenSecret, profile, done) {
-//         // retrieve user
-//         User.findOne({ twitter_id: profile.id }, done);
-//     }
-// ))
-
-// const GoogleStrategy = require('passport-google-auth').Strategy
-// passport.use(new GoogleStrategy({
-//         clientId: 'your-client-id',
-//         clientSecret: 'your-secret',
-//         callbackURL: 'http://localhost:' + (process.env.PORT || 3000) + '/auth/google/callback'
-//     },
-//     function(token, tokenSecret, profile, done) {
-//         // retrieve user
-//         User.findOne({ google_id: profile.id }, done);
-//     }
-// ))

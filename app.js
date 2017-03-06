@@ -12,7 +12,6 @@ const passport = require('koa-passport');
 // const nunjucks = require('nunjucks');
 const controller = require('./controller');
 const mysql = require('mysql');
-const db_config = require('./db_config');
 
 // const isProduction = process.env.NODE_ENV === 'production';
 

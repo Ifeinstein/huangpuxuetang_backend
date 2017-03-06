@@ -10,7 +10,7 @@ var register = async(ctx, next) => {
     });
 
     if (find_user.length) {
-        await ctx.response.body = JSON.stringify({
+        ctx.response.body = JSON.stringify({
             create_user: false,
             message: "此手机号已被注册！"
         });
@@ -30,7 +30,7 @@ var register = async(ctx, next) => {
             "session_key": user_info.session_key
         });
         console.log('create:' + JSON.stringify(create_user));
-        await ctx.response.body = JSON.stringify({
+        ctx.response.body = JSON.stringify({
             create_user: true,
             message: "注册成功！"
         });

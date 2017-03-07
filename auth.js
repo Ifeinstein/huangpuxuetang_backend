@@ -1,6 +1,6 @@
 const passport = require('koa-passport');
 const model = require('./model');
-const wx_config = require('./config/wx_config.js');
+const wx_config = require('./config/wx_config');
 
 let User = model.User;
 
@@ -22,9 +22,10 @@ passport.use(new LocalStrategy({
     usernameField: 'code',
     passwordField: 'password'
 }, async function(code, password, done) {
-    let user_info = wx_config.user_info(code);
-
-    let user = await User.findOne({ where: { openId: user_info.openId } })
+    // let user_info = JSON.parse(await wx_config.user_info(code));
+    let user = await User.findOne({ where: { openid: user_info.openid } });
+    console.log(user_info);
+    console.log(user);
     if (user) {
         done(null, user)
     } else {
